@@ -8,6 +8,8 @@ const http = require("http");
 const morgan = require("morgan");
 const app = express();
 const UserRouter = require("./routes/user");
+const ProductRouter = require("./routes/product");
+const WishlistRouter = require("./routes/wishlist");
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -19,6 +21,8 @@ app.use((req, res, next) => {
 });
 
 app.use("/user", UserRouter);
+app.use("/product", ProductRouter);
+app.use("/wishlist", WishlistRouter);
 
 const server = http.createServer(app);
 

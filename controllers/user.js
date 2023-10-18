@@ -13,7 +13,7 @@ const login = async (req, res) => {
     });
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email }).populate("wishlist");
 
   if (!user) {
     return res.status(404).json({
@@ -35,16 +35,14 @@ const login = async (req, res) => {
     expiresIn: "24h",
   });
 
-  const userObj = { user, token };
   return res.status(200).json({
     status: true,
     message: "Login successful",
-    user: userObj,
+    user: { user, token },
   });
 };
 
 const signup = async (req, res) => {
-  console.log("----req.body---", req.body);
   try {
     const { username, email, password } = req.body;
 

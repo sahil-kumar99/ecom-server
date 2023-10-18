@@ -17,6 +17,12 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );
