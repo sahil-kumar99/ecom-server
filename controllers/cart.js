@@ -1,27 +1,32 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
 const User = require("../models/user");
+const Product = require("../models/product");
 
-const addToWishlist = async (req, res) => {
+const addCart = async (req, res) => {
   try {
     const userId = req.user.userId;
     const { productId } = req.body;
     const user = await User.findById(new ObjectId(userId).toString());
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    if (user.wishlist.includes(new ObjectId(productId).toString())) {
+
+    if (user.cart.includes(new ObjectId(productId).toString())) {
       return res
         .status(400)
-        .json({ status: true, message: "Product is already in the wishlist" });
+        .json({ status: true, message: "Product is already in cart" });
     }
 
-    user.wishlist.push(productId);
+    user.cart.push(productId);
     await user.save();
 
+    const product = await Product.findById(productId);
     res.status(200).json({
       status: true,
-      message: "Product added to wishlist successfully",
+      message: "Product added to cart",
+      product,
     });
   } catch (err) {
     return res
@@ -30,7 +35,7 @@ const addToWishlist = async (req, res) => {
   }
 };
 
-const removeFromWishlist = async (req, res) => {
+const removeCart = async (req, res) => {
   try {
     const userId = req.user.userId;
     const { productId } = req.body;
@@ -41,22 +46,29 @@ const removeFromWishlist = async (req, res) => {
       return res.status(404).json({ status: false, message: "User not found" });
     }
 
-    if (!user.wishlist.includes(productId)) {
+    const product = await Product.findById(new ObjectId(productId).toString());
+    if (!product) {
       return res
-        .status(400)
-        .json({ status: false, message: "Product is not in wishlist" });
+        .status(404)
+        .json({ status: false, message: "product not found" });
     }
 
-    user.wishlist = user.wishlist.filter((item) => !item.equals(productId));
+    if (!user.cart.includes(productId)) {
+      return res
+        .status(400)
+        .json({ status: false, message: "Product not in cart" });
+    }
+
+    user.cart = user.cart.filter((item) => !item.equals(productId));
     await user.save();
 
     res
       .status(200)
-      .json({ status: true, message: "Product removed from wishlist" });
+      .json({ status: true, message: "Product removed from cart", product });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
-module.exports = { addToWishlist, removeFromWishlist };
+module.exports = { addCart, removeCart };

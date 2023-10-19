@@ -23,6 +23,12 @@ const userSchema = new Schema(
         ref: "Product",
       },
     ],
+    cart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product",
+      },
+    ],
   },
   { timestamps: { createdAt: true, updatedAt: true } }
 );

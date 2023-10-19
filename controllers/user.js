@@ -13,8 +13,9 @@ const login = async (req, res) => {
     });
   }
 
-  const user = await User.findOne({ email }).populate("wishlist");
-
+  const user = await User.findOne({ email })
+    .populate("wishlist")
+    .populate({ path: "cart", model: "Product" });
   if (!user) {
     return res.status(404).json({
       status: false,
