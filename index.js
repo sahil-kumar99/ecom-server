@@ -10,7 +10,8 @@ const app = express();
 const UserRouter = require("./routes/user");
 const ProductRouter = require("./routes/product");
 const WishlistRouter = require("./routes/wishlist");
-const cartRouter = require("./routes/cart");
+const CartRouter = require("./routes/cart");
+const OrderRouter = require("./routes/order");
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -24,7 +25,8 @@ app.use((req, res, next) => {
 app.use("/user", UserRouter);
 app.use("/product", ProductRouter);
 app.use("/wishlist", WishlistRouter);
-app.use("/cart", cartRouter);
+app.use("/cart", CartRouter);
+app.use("/order", OrderRouter);
 
 const server = http.createServer(app);
 

@@ -80,7 +80,28 @@ const signup = async (req, res) => {
   }
 };
 
+const emptyCart = async (req, res) => {
+  try {
+    const { userId } = req.user;
+
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    user.cart = [];
+
+    await user.save();
+
+    res.status(200).json({ status: true, message: "Cart items removed" });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "Internal Server Error" });
+  }
+};
+
 module.exports = {
   login,
   signup,
+  emptyCart,
 };
