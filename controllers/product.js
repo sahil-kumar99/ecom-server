@@ -39,4 +39,17 @@ const getProduct = async (req, res) => {
   }
 };
 
-module.exports = { addProduct, getProduct };
+const searchProduct = async (req, res) => {
+  try {
+    const searchQuery = req.query.q;
+
+    const regex = new RegExp(searchQuery, "i");
+
+    const results = await Product.find({ title: regex });
+    res.json({ status: true, message: "successfully searched", results });
+  } catch (error) {
+    res.status(500).json({ status: false, message: "An error occurred" });
+  }
+};
+
+module.exports = { addProduct, getProduct, searchProduct };
