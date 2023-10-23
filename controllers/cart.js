@@ -59,7 +59,7 @@ const removeCart = async (req, res) => {
         .json({ status: false, message: "Product not in cart" });
     }
 
-    user.cart = user.cart.filter((item) => !item.equals(productId));
+    user.cart = await user.cart.filter((item) => !item.equals(productId));
     await user.save();
 
     res

@@ -54,12 +54,19 @@ const signup = async (req, res) => {
       });
     }
 
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
       return res.status(409).json({
         status: false,
-        message: "User with this email already exists",
+        message: "Username already exists",
+      });
+    }
+
+    const existingUserEmail = await User.findOne({ email });
+    if (existingUserEmail) {
+      return res.status(409).json({
+        status: false,
+        message: "User email already exists",
       });
     }
 
