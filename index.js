@@ -12,6 +12,7 @@ const ProductRouter = require("./routes/product");
 const WishlistRouter = require("./routes/wishlist");
 const CartRouter = require("./routes/cart");
 const OrderRouter = require("./routes/order");
+const PaymentRouter = require("./routes/payment");
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -27,6 +28,7 @@ app.use("/product", ProductRouter);
 app.use("/wishlist", WishlistRouter);
 app.use("/cart", CartRouter);
 app.use("/order", OrderRouter);
+app.use("/payment", PaymentRouter);
 
 const server = http.createServer(app);
 
