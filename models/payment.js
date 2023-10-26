@@ -10,10 +10,6 @@ const paymentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    paymentSign: {
-      type: String,
-      required: true,
-    },
     order: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Order",

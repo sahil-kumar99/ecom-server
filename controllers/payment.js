@@ -9,7 +9,8 @@ const createPayment = async (req, res) => {
       order_id,
       razorpay_order_id,
       razorpay_payment_id,
-      razorpay_signature,
+      // razorpay_signature,
+      order_status,
     } = req.body;
 
     const order = await Order.findById(order_id);
@@ -23,13 +24,18 @@ const createPayment = async (req, res) => {
     const newPayment = new Payment({
       orderId: razorpay_order_id,
       paymentId: razorpay_payment_id,
-      paymentSign: razorpay_signature,
+      // paymentSign: razorpay_signature,
       order: order._id,
     });
 
-    order.status = "success";
+    order.status = order_status;
     await order.save();
     await newPayment.save();
+    if (order_status.toLowerCase() === "failed") {
+      return res
+        .status(200)
+        .json({ status: false, message: "order not placed" });
+    }
     return res
       .status(200)
       .json({ status: true, message: "order placed successfully" });
