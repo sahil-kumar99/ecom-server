@@ -62,7 +62,7 @@ const getOrders = async (req, res) => {
   try {
     const { userId } = req.user;
 
-    const orders = await Order.find({ user: userId });
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
 
     res
       .status(200)
